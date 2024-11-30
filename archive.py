@@ -31,6 +31,7 @@ class Archiver:
                 raise FileExistsError(new_path)
             print(f'{path} => {new_path}')
             if not dry_run:
+                new_path.parent.mkdir(parents=True, exist_ok=True)
                 path.rename(new_path)
 
 
