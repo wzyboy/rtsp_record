@@ -4,6 +4,7 @@ import re
 import argparse
 from pathlib import Path
 from datetime import datetime
+from datetime import timedelta
 
 from collections.abc import Iterator
 
@@ -14,8 +15,8 @@ class Archiver:
 
     def __init__(self, base_dir: Path) -> None:
         self.base_dir = base_dir
-        start_of_day = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        self.threshold = start_of_day
+        now = datetime.now()
+        self.threshold = now - timedelta(minutes=60)
 
     def iter_mv_pair(self) -> Iterator[tuple[Path, Path]]:
         for path in self.base_dir.glob('*.mkv'):
