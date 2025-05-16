@@ -25,6 +25,8 @@ class Archiver:
                 if ts < self.threshold:
                     new_path = self.base_dir / ts.strftime('%Y-%m-%d') / path.name
                     yield (path, new_path)
+        else:
+            raise SystemExit('No matching files found.')
 
     def archive(self, dry_run: bool = False) -> None:
         for path, new_path in self.iter_mv_pair():
