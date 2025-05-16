@@ -19,13 +19,15 @@ class Archiver:
         self.threshold = now - timedelta(minutes=60)
 
     def iter_mv_pair(self) -> Iterator[tuple[Path, Path]]:
+        matched_any = False
         for path in self.base_dir.glob('*.mkv'):
             if matched := re.search(self.TS_RE, path.stem):
                 ts = datetime.strptime(matched.group(0), self.TS_FMT)
                 if ts < self.threshold:
                     new_path = self.base_dir / ts.strftime('%Y-%m-%d') / path.name
+                    matched_any = True
                     yield (path, new_path)
-        else:
+        if not matched_any:
             raise SystemExit('No matching files found.')
 
     def archive(self, dry_run: bool = False) -> None:
